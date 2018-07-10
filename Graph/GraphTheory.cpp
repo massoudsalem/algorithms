@@ -5,6 +5,7 @@ bool vis[2000+5]; //visited array
 vector<int> AdjList[100000+5];
 vector<int> ToboSort;//topological sort vector
 int n,e,u,v; //n is nodes //e is edges //u is perent //v is child
+int CC=0;
 void CreatingAdjListGraph(){
 		cin>>n>>e;
 		for(int i=0;i<e;++i){
@@ -38,6 +39,15 @@ void DFSItr(int root){	//Iterative
 				}
 			}
 		}
+}
+int Connectedcomponents(){  //counting number of connectedcomponents
+	for(int i=1;i<=n;++i){
+    if(!vis[i]){
+      DFSItr(i);
+      CC++;
+    }
+  }
+  return CC;
 }
 void BFS(int root){
     queue<int> qu;
