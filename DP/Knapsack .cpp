@@ -3,6 +3,7 @@ using namespace std;
 
 int mem[1000+5][1000+5];
 int dp[2][2000000+5];
+int kdp[20000+5];
 int w,n,price[1000+5],weight[1000+5];
 int LKS(int curr=0,int rem=w){  //multi-items mem
   if(rem<0)
@@ -15,11 +16,18 @@ int LKS(int curr=0,int rem=w){  //multi-items mem
   return ret;
 }
 int LKS(){  //single item dp
-  for(int i=1;i<=n;++i)
-    for(int j=1;j<=w;++j){
+  for(int i=0;i<=n;++i)
+    for(int j=0;j<=w;++j){
       dp[i&1][j]=dp[!(i&1)][j];
       if(j>=weight[i])
         dp[i&1][j]=max(dp[i&1][j],price[i]+dp[!(i&1)][j-weight[i]]);
     }
-    return dp[n&1][w];
+    return dp[!(n&1)][w];
+}
+int LKSOptimized(){  //single item dp
+  for(int i=0;i<=n;++i)
+    for(int j=20000;j>=weight[i];--j){
+        kdp[j]=max(kdp[j],price[i]+kdp[j-weight[i]]);
+    }
+    return kdp[w];
 }
