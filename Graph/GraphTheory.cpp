@@ -2,6 +2,8 @@
 using namespace std;
 int dis [2000+5]; //distance array
 bool vis[2000+5]; //visited array
+int dx[] = {1, -1, 0, 0};
+int dy[] = {0, 0, 1, -1};
 vector<int> AdjList[100000+5];
 vector<int> ToboSort;//topological sort vector
 int n,e,u,v; //n is nodes //e is edges //u is perent //v is child
@@ -85,6 +87,14 @@ void DFSItr(int root){	//Iterative
 			}
 		}
 }
+void DFS2D(int stx , int sty) {
+	vis[stx][sty] = 1;
+	for(int i = 0; i < 4; ++i) {
+		int nx = stx + dx[i] , ny = sty + dy[i];
+		if(!vis[nx][ny] && valid(nx , ny))
+			DFS(nx , ny);
+	}
+}
 int Connectedcomponents(){  //counting number of connectedcomponents
 	for(int i=1;i<=n;++i){
     if(!vis[i]){
@@ -108,6 +118,28 @@ void BFS(int root){
             }
         }
     }
+}
+bool bipartite(int s, int c = 0){
+	queue<int> q;
+	int u, v;
+	color[s] = c;
+	q.push(s);
+	while(!q.empty()){
+		u = q.front();
+		q.pop();
+		for(int i = 0; i < adj[u].size(); i++){
+			v = adj[u][i];
+			if(color[v] == -1){
+				color[v] = 1 - color[u];
+				q.push(v);
+			}
+			else {
+				if (color[v] != 1-color[u])return 0;
+			}
+		}
+	}
+	return 1;
+ 
 }
 int main(){
 		CreatingAdjListGraph();
