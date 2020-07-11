@@ -145,3 +145,47 @@ int main(){
 		CreatingAdjListGraph();
  		BFS(0);
 }
+
+//-------- DSU ----------
+
+int parent[100005], height[100005], forests;
+void Init(int n){
+	for(int i = 0; i < n; i++){
+		parent[i] = i;
+		height[i] = 0;
+	}
+	 forests = n; 
+}
+int find_set(int x){
+	if (parent[x] == x)return x;
+	return parent[x] = find_set(parent[x]);
+}
+void link(int x, int y){
+	if(height[x] > height[y])swap(x,y);
+	parent[x] = y;
+	if(height[x] == height[y])height[y]++;
+}
+bool union_sets(int x, int y){
+	int u = find_set(x), v = find_set(y);
+	if (u != y){
+		link(x,y);
+		forests--;
+	}
+	return x != y;
+}
+int kruskal() {
+	int n, m, cost = 0, u, v, c;
+	vector<pair<int, pair<int,int> > > edges;
+	cin >> n >> m;
+	for (int i = 0; i < m; i++){
+		cin >> u >> v >> c;
+		edges.push_back({c,{u,v}});
+	}
+	Init(n);
+	sort(edges.begin(), edges.end());
+	for (auto p : edges){
+		if (forests == 1)break;
+		if (union_sets(p.second.first,p.second.second))cost += p.first;
+	}
+	return cost;
+}
